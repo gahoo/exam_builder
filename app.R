@@ -19,7 +19,7 @@ hide_answer <- function(x, hide=FALSE){
 
 filter_timu <- function(x, timu_type){
   if(timu_type == 'choice'){
-    x %>% filter(answer %in% c('A', 'B', 'C', 'D'))
+    x %>% filter(answer %in% c('A', 'B', 'C', 'D', 'E', 'F'))
   }else if(timu_type == 'ture_false'){
     x %>% filter(answer %in% c('错误', '正确'))
   }else if(timu_type == 'essay'){
