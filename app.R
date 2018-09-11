@@ -23,7 +23,7 @@ filter_timu <- function(x, timu_type){
   }else if(timu_type == 'ture_false'){
     x %>% filter(answer %in% c('错误', '正确'))
   }else if(timu_type == 'essay'){
-    x %>% filter(options == '' || is.na(options)) 
+    x %>% filter(options == '' | is.na(options)) 
   }
 }
 
@@ -55,11 +55,11 @@ format_options <- function(x){
   x
 }
 
-answer2txt <- function(x){
+answer2txt <- function(x, join='  '){
   if(length(x$answer)){
     paste0(1:length(x$answer), '. ',
            gsub('正确答案：','', x$answer),
-           collapse = '  ')
+           collapse = join)
   }else{
     ""
   }
@@ -125,7 +125,7 @@ server <- function(input, output, session) {
   tiku <- reactive({
     paste0('questions/', input$library) %>%
       lapply(function(x){
-        timu <- read.csv(x)
+        timu <- read.csv(x, stringsAsFactors = F)
         timu[is.na(timu)] <- ''
         timu
         })
@@ -161,7 +161,7 @@ server <- function(input, output, session) {
       input$exam_name,
       choice_timu %>% answer2txt,
       ture_false_timu %>% answer2txt,
-      essay_timu %>% answer2txt
+      essay_timu %>% answer2txt(join='\n\n')
     )
     
     template_args <- template_args[template_args!='']
